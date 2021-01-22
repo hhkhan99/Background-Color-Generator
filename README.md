@@ -1,2 +1,2 @@
 # Background-Color-Generator
-[Click here to view](file:///C:/Users/Zaid%20Khan/Documents/web%20dev/backgroundgenerator/index.html)
+[Click here to view](https://hhkhan99.github.io/Background-Color-Generator/)
