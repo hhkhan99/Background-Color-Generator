@@ -3,26 +3,16 @@ var color1 = document.querySelector(".color1");
 var color2 = document.querySelector(".color2");
 var body = document.getElementById("gradient");
 
-
-
-
 function setGradient() {
-	body.style.background = 
-	"linear-gradient(to right, " 
-	+ color1.value 
-	+ ", " 
-	+ color2.value 
-	+ ")";
-
-	css.textContent = body.style.background + ";";
+  body.style.background = "linear-gradient(to right, " + color1.value + ", " + color2.value + ")";
+  if (css) css.textContent = body.style.background + ";";
 }
-console.log(setGradient());
+setGradient(); // remove the console.log(undefined)
 
 color1.addEventListener("input", setGradient);
-
 color2.addEventListener("input", setGradient);
 
-// --- Sunny 2.0 link support: ?color=solid%20red or ?hex=%23FF0000
+// --- URL support ---
 const MAP = {
   "solid red":   "#FF0000",
   "solid green": "#00FF00",
@@ -31,21 +21,25 @@ const MAP = {
 };
 
 function setSolid(hex){
-  document.body.style.background = hex;
-  const cssEl = document.querySelector("h3");
-  if (cssEl) cssEl.textContent = `background: ${hex};`;
+  body.style.background = hex;
+  if (css) css.textContent = `background: ${hex};`;
 }
-
 function setNamedColor(name){
-  const hex = MAP[name.toLowerCase()];
+  const hex = MAP[name.toLowerCase().trim()];
   if (hex) setSolid(hex);
 }
 
 (function initFromURL(){
   const q = new URLSearchParams(location.search);
-  const hex = q.get("hex");
-  const color = q.get("color");
-  if (hex) setSolid(hex);
-  else if (color) setNamedColor(color);
-  else if (typeof setGradient === "function") setGradient(); // your existing function
+  let hex = q.get("hex");
+  let color = q.get("color");
+  if (hex) {
+    hex = hex.trim();
+    if (!hex.startsWith("#")) hex = "#" + hex;
+    setSolid(hex);
+  } else if (color) {
+    setNamedColor(color);
+  } else {
+    setGradient();
+  }
 })();
